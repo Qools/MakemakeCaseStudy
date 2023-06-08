@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using DG.Tweening;
 
 public class Joystick : MonoBehaviour
 {
@@ -23,6 +23,8 @@ public class Joystick : MonoBehaviour
 
     public bool isReady = true;
 
+    [SerializeField] private CanvasGroup joystickCanvasGroup;
+
     private void Awake()
     {
         current = this;
@@ -31,6 +33,10 @@ public class Joystick : MonoBehaviour
     void Start()
     {
         ShowHide(false);
+
+        joystickCanvasGroup.DOFade(0, 0.001f);
+        joystickCanvasGroup.interactable = false;
+        joystickCanvasGroup.blocksRaycasts = false;
     }
 
     void Update()
@@ -70,6 +76,32 @@ public class Joystick : MonoBehaviour
             ShowHide(false);
             direction = Vector2.zero;
         }
+    }
+
+    private void OnEnable()
+    {
+        EventSystem.OnStartGame += EnableJoystick;
+        EventSystem.OnGameOver += DisableJoystick;
+    }
+
+    private void OnDisable()
+    {
+        EventSystem.OnStartGame -= EnableJoystick;
+        EventSystem.OnGameOver -= DisableJoystick;
+    }
+
+    private void EnableJoystick()
+    {
+        joystickCanvasGroup.DOFade(1, 0.01f);
+        joystickCanvasGroup.interactable = true;
+        joystickCanvasGroup.blocksRaycasts = true;
+    }
+
+    private void DisableJoystick(GameResult gameResult)
+    {
+        joystickCanvasGroup.DOFade(0, 0.001f);
+        joystickCanvasGroup.interactable = false;
+        joystickCanvasGroup.blocksRaycasts = false;
     }
 
     public float GetAxis(string _direction)
