@@ -2,11 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerInput : MonoBehaviour
+public class NpcController : MonoBehaviour
 {
     [SerializeField] private Transform character;
     [SerializeField] private Rigidbody _rigidbody;
     [SerializeField] private Animator _animator;
+
+    private Transform playerTransform;
+
+    [SerializeField] private float minDistanceToPlayer;
 
     [SerializeField] private float movementSpeed;
     [SerializeField] private float rotationSpeed;
@@ -14,18 +18,32 @@ public class PlayerInput : MonoBehaviour
 
     private bool isGameStarted = false;
 
-    // Update is called once per frame
+    // Start is called before the first frame update
+    void Start()
+    {
+        playerTransform = GameObject.FindWithTag(PlayerPrefKeys.player).transform;
+    }
+
     void FixedUpdate()
     {
         if (!isGameStarted)
             return;
 
-        direction = new Vector3(
-            Joystick.current.GetAxis(PlayerPrefKeys.horizontal), 
-            0f, 
-            Joystick.current.GetAxis(PlayerPrefKeys.vertical));
+        direction = (playerTransform.position - transform.position).normalized;
 
         Rotate();
+
+        if (CalculateDistance())
+        {
+            Stop();
+
+            return;
+        }
+
+        else
+        {
+            _rigidbody.isKinematic = false;
+        }
 
         Movement();
     }
@@ -34,14 +52,12 @@ public class PlayerInput : MonoBehaviour
     {
         EventSystem.OnStartGame += OnGameStarted;
         EventSystem.OnGameOver += OnGameOver;
-        EventSystem.OnJoystickButtonUp += OnJoystickButtonUp;
     }
 
     private void OnDisable()
     {
         EventSystem.OnStartGame -= OnGameStarted;
         EventSystem.OnGameOver -= OnGameOver;
-        EventSystem.OnJoystickButtonUp -= OnJoystickButtonUp;
     }
 
     private void OnGameStarted()
@@ -60,7 +76,7 @@ public class PlayerInput : MonoBehaviour
 
     private void Movement()
     {
-        Vector3 newVelocity = Joystick.current.knobDistance * movementSpeed * Time.fixedDeltaTime * direction;
+        Vector3 newVelocity = movementSpeed * Time.fixedDeltaTime * direction;
         newVelocity.y = _rigidbody.velocity.y;
         _rigidbody.velocity = newVelocity;
     }
@@ -76,16 +92,20 @@ public class PlayerInput : MonoBehaviour
             rotationSpeed * Time.fixedDeltaTime);
     }
 
-    private void OnJoystickButtonUp()
-    {
-        _rigidbody.velocity = Vector3.zero;
-        _rigidbody.angularVelocity = Vector3.zero;
-    }
-
     private void Stop()
     {
         _rigidbody.velocity = Vector3.zero;
         _rigidbody.angularVelocity = Vector3.zero;
         _rigidbody.isKinematic = true;
+    }
+
+    private bool CalculateDistance()
+    {
+        bool isNear = false;
+
+        if (Vector3.Distance(playerTransform.position, transform.position) <= minDistanceToPlayer)
+            isNear = true;
+
+        return isNear;
     }
 }

@@ -4,17 +4,12 @@ using UnityEngine;
 
 public class AnimationController : MonoBehaviour
 {
-    [SerializeField] private Animator animator;
-    private PlayerInput playerInput;
+    [SerializeField] private Animator _animator;
+    [SerializeField] private Rigidbody _rigidbody;
 
     private void Update()
     {
-        animator.SetFloat(PlayerPrefKeys.direction, playerInput.Velocity);
-    }
-
-    private void Start()
-    {
-        playerInput = GetComponent<PlayerInput>();
+        _animator.SetFloat(PlayerPrefKeys.movementSpeed, _rigidbody.velocity.magnitude);
     }
 
     private void OnEnable()
