@@ -75,6 +75,8 @@ public class Joystick : MonoBehaviour
         {
             ShowHide(false);
             direction = Vector2.zero;
+
+            EventSystem.CallJoystickButtonUp();
         }
     }
 
@@ -108,8 +110,8 @@ public class Joystick : MonoBehaviour
     {
         switch (_direction)
         {
-            case "Horizontal": return direction.x;
-            case "Vertical": return direction.y;
+            case PlayerPrefKeys.horizontal: return direction.x;
+            case PlayerPrefKeys.vertical: return direction.y;
             default: return 0;
         }
     }
@@ -118,11 +120,11 @@ public class Joystick : MonoBehaviour
     {
         switch (_direction)
         {
-            case "Horizontal":
+            case PlayerPrefKeys.horizontal:
                 if (direction.x > 0.0f) return 1f;
                 if (direction.x < 0.0f) return -1f;
                 return 0;
-            case "Vertical":
+            case PlayerPrefKeys.vertical:
                 if (direction.y > 0.0f) return 1f;
                 if (direction.y < 0.0f) return -1f;
                 return 0;
