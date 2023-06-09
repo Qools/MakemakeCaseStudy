@@ -14,10 +14,15 @@ public class PlayerInput : MonoBehaviour
 
     private bool isGameStarted = false;
 
+    private bool isDead = false;
+
     // Update is called once per frame
     void FixedUpdate()
     {
         if (!isGameStarted)
+            return;
+
+        if (isDead)
             return;
 
         direction = new Vector3(
@@ -35,6 +40,7 @@ public class PlayerInput : MonoBehaviour
         EventSystem.OnStartGame += OnGameStarted;
         EventSystem.OnGameOver += OnGameOver;
         EventSystem.OnJoystickButtonUp += OnJoystickButtonUp;
+        EventSystem.OnNpcDeath += SetDead;
     }
 
     private void OnDisable()
@@ -42,6 +48,7 @@ public class PlayerInput : MonoBehaviour
         EventSystem.OnStartGame -= OnGameStarted;
         EventSystem.OnGameOver -= OnGameOver;
         EventSystem.OnJoystickButtonUp -= OnJoystickButtonUp;
+        EventSystem.OnNpcDeath -= SetDead;
     }
 
     private void OnGameStarted()
@@ -87,5 +94,12 @@ public class PlayerInput : MonoBehaviour
         _rigidbody.velocity = Vector3.zero;
         _rigidbody.angularVelocity = Vector3.zero;
         _rigidbody.isKinematic = true;
+    }
+
+    public void SetDead()
+    {
+        isDead = true;
+
+        Stop();
     }
 }

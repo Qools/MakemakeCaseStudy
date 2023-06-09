@@ -4,40 +4,103 @@ using UnityEngine;
 
 public class PlayerFightController : MonoBehaviour, IFightController
 {
+    [SerializeField] private AnimationController _animationController;
+    
+    [SerializeField] private FightValues fightValues;
+
+    private bool isInRange = false;
+
+    private IFightController enemyFightController;
+
+    private float healthPoints;
+
     // Start is called before the first frame update
     void Start()
     {
-        
+        isInRange = false;
+
+        healthPoints = fightValues.healthPoints;
     }
 
-    // Update is called once per frame
-    void Update()
+    private void OnTriggerEnter(Collider other)
     {
-        
+        if (other.CompareTag(PlayerPrefKeys.enemy))
+        {
+            isInRange = true;
+
+            enemyFightController = other.GetComponent<IFightController>();
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.CompareTag(PlayerPrefKeys.enemy))
+        {
+            isInRange = false;
+        }
     }
 
     public void ChooseAttackType()
     {
-        throw new System.NotImplementedException();
+        
     }
 
     public void HeavyAttack()
     {
-        throw new System.NotImplementedException();
+        if (!isInRange)
+            return;
+
+        _animationController.TriggerAttackAnimation(PlayerPrefKeys.heavyAttack);
+
+        enemyFightController.TakeDamage(fightValues.heavyAttackDamage);
     }
 
     public void LightAttack()
     {
-        throw new System.NotImplementedException();
+        if (!isInRange)
+            return;
+
+        _animationController.TriggerAttackAnimation(PlayerPrefKeys.lightAttack);
+
+        enemyFightController.TakeDamage(fightValues.lightAttackDamage);
     }
 
     public void PlayHeavyAttackVfx()
     {
-        throw new System.NotImplementedException();
+       
     }
 
     public void PlayLightAttackVfx()
     {
-        throw new System.NotImplementedException();
+        
+    }
+
+    public void TakeDamage(float damageValue)
+    {
+        healthPoints -= damageValue;
+
+        CheckHealthPoint();
+
+        switch (damageValue)
+        {
+            case 10f:
+                _animationController.TriggerAttackAnimation(PlayerPrefKeys.lightDamage);
+                break;
+            case 25f:
+                _animationController.TriggerAttackAnimation(PlayerPrefKeys.heavyDamage);
+                break;
+        }
+    }
+
+    public void CheckHealthPoint()
+    {
+        if (healthPoints <= 0)
+        {
+            _animationController.TriggerAttackAnimation(PlayerPrefKeys.death);
+
+            EventSystem.CallPlayerDeath();
+
+            EventSystem.CallGameOver(GameResult.Lose);
+        }
     }
 }

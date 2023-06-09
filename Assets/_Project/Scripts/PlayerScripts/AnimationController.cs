@@ -7,8 +7,18 @@ public class AnimationController : MonoBehaviour
     [SerializeField] private Animator _animator;
     [SerializeField] private Rigidbody _rigidbody;
 
+    private bool isGameOver;
+
+    private void Start()
+    {
+        isGameOver = false;
+    }
+
     private void Update()
     {
+        if (isGameOver)
+            return;
+
         _animator.SetFloat(PlayerPrefKeys.movementSpeed, _rigidbody.velocity.magnitude);
     }
 
@@ -30,5 +40,14 @@ public class AnimationController : MonoBehaviour
 
     private void OnGameOver(GameResult gameResult)
     {
+        isGameOver = true;
+    }
+
+    public void TriggerAttackAnimation(string _animationName)
+    {
+        if (isGameOver)
+            return;
+
+        _animator.SetTrigger(_animationName);
     }
 }

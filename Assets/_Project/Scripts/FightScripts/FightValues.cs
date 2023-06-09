@@ -5,6 +5,8 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "FightValues", menuName = "FightValues")]
 public class FightValues : ScriptableObject
 {
+    public float healthPoints;
+
     public float attackCooldown;
 
     public float heavyAttackDamage;

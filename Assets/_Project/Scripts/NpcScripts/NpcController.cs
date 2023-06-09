@@ -8,7 +8,7 @@ public class NpcController : MonoBehaviour
     [SerializeField] private Rigidbody _rigidbody;
     [SerializeField] private Animator _animator;
 
-    private Transform playerTransform;
+    [SerializeField] private Transform playerTransform;
 
     [SerializeField] private float minDistanceToPlayer;
 
@@ -18,15 +18,15 @@ public class NpcController : MonoBehaviour
 
     private bool isGameStarted = false;
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        playerTransform = GameObject.FindWithTag(PlayerPrefKeys.player).transform;
-    }
+    public bool isDead = false;
+
 
     void FixedUpdate()
     {
         if (!isGameStarted)
+            return;
+
+        if (isDead) 
             return;
 
         direction = (playerTransform.position - transform.position).normalized;
@@ -52,12 +52,14 @@ public class NpcController : MonoBehaviour
     {
         EventSystem.OnStartGame += OnGameStarted;
         EventSystem.OnGameOver += OnGameOver;
+        EventSystem.OnNpcDeath += SetDead;
     }
 
     private void OnDisable()
     {
         EventSystem.OnStartGame -= OnGameStarted;
         EventSystem.OnGameOver -= OnGameOver;
+        EventSystem.OnNpcDeath -= SetDead;
     }
 
     private void OnGameStarted()
@@ -107,5 +109,10 @@ public class NpcController : MonoBehaviour
             isNear = true;
 
         return isNear;
+    }
+
+    public void SetDead()
+    {
+        isDead = true;
     }
 }

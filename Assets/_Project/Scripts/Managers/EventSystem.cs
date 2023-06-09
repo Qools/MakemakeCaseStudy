@@ -13,4 +13,10 @@ public static class EventSystem
 
     public static Action OnJoystickButtonUp;
     public static void CallJoystickButtonUp() => OnJoystickButtonUp?.Invoke();
+
+    public static Action OnNpcDeath;
+    public static void CallNpcDeath() => OnNpcDeath?.Invoke();
+
+    public static Action OnPlayerDeath;
+    public static void CallPlayerDeath() => OnPlayerDeath?.Invoke();
 }

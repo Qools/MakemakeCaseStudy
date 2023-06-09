@@ -11,4 +11,8 @@ public interface IFightController
 
     public void PlayLightAttackVfx();
     public void PlayHeavyAttackVfx();
+
+    public void TakeDamage(float damageValue);
+
+    public void CheckHealthPoint();
 }
