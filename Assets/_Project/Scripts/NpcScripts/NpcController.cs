@@ -73,6 +73,7 @@ public class NpcController : MonoBehaviour
 
     private void OnGameOver(GameResult gameResult)
     {
+        isGameStarted = false;
         Stop();
     }
 
@@ -99,8 +100,6 @@ public class NpcController : MonoBehaviour
         _rigidbody.velocity = Vector3.zero;
         _rigidbody.angularVelocity = Vector3.zero;
         _rigidbody.isKinematic = true;
-
-        isGameStarted = false;
     }
 
     private bool CalculateDistance()

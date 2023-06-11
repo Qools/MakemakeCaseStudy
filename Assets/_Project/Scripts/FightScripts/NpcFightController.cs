@@ -144,7 +144,7 @@ public class NpcFightController : MonoBehaviour, IFightController
 
             EventSystem.CallNpcDeath();
 
-            EventSystem.CallGameOver(GameResult.Lose);
+            EventSystem.CallGameOver(GameResult.Win);
         }
     }
 

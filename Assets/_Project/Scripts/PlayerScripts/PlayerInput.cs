@@ -7,6 +7,7 @@ public class PlayerInput : MonoBehaviour
     [SerializeField] private Transform character;
     [SerializeField] private Rigidbody _rigidbody;
     [SerializeField] private Animator _animator;
+    [SerializeField] private Joystick joystick;
 
     [SerializeField] private float movementSpeed;
     [SerializeField] private float rotationSpeed;
@@ -26,9 +27,9 @@ public class PlayerInput : MonoBehaviour
             return;
 
         direction = new Vector3(
-            Joystick.current.GetAxis(PlayerPrefKeys.horizontal), 
-            0f, 
-            Joystick.current.GetAxis(PlayerPrefKeys.vertical));
+            joystick.Horizontal,
+            0f,
+            joystick.Vertical);
 
         Rotate();
 
@@ -67,7 +68,7 @@ public class PlayerInput : MonoBehaviour
 
     private void Movement()
     {
-        Vector3 newVelocity = Joystick.current.knobDistance * movementSpeed * Time.fixedDeltaTime * direction;
+        Vector3 newVelocity = joystick.HandleRange * movementSpeed * Time.fixedDeltaTime * direction;
         newVelocity.y = _rigidbody.velocity.y;
         _rigidbody.velocity = newVelocity;
     }
