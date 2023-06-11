@@ -12,6 +12,8 @@ public class AnimationController : MonoBehaviour
     private void Start()
     {
         isGameOver = false;
+
+        _animator.SetFloat(PlayerPrefKeys.movementSpeed, 0f);
     }
 
     private void Update()
