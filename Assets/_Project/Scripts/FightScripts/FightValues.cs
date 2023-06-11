@@ -14,4 +14,7 @@ public class FightValues : ScriptableObject
 
     public float lightAttackDamage;
     public float lightAttackChance;
+
+    public float stunChance;
+    public float stunDuration;
 }

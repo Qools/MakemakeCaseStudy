@@ -18,3 +18,5 @@ MonoBehaviour:
   heavyAttackChange: 25
   lightAttackDamage: 10
   lightAttackChance: 75
+  stunChance: 25
+  stunDuration: 2

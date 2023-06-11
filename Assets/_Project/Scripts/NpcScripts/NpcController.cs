@@ -16,7 +16,7 @@ public class NpcController : MonoBehaviour
     [SerializeField] private float rotationSpeed;
     private Vector3 direction;
 
-    private bool isGameStarted = false;
+    public bool isGameStarted = false;
 
     public bool isDead = false;
 
@@ -99,6 +99,8 @@ public class NpcController : MonoBehaviour
         _rigidbody.velocity = Vector3.zero;
         _rigidbody.angularVelocity = Vector3.zero;
         _rigidbody.isKinematic = true;
+
+        isGameStarted = false;
     }
 
     private bool CalculateDistance()

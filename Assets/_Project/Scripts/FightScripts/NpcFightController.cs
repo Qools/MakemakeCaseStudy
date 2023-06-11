@@ -6,7 +6,9 @@ public class NpcFightController : MonoBehaviour, IFightController
 {
     [SerializeField] private AnimationController _animationController;
     private NpcController npcController;
-    
+    [SerializeField] private HealthBarView healthBarView;
+    [SerializeField] private VfxController vfxController;
+
     [SerializeField] private FightValues fightValues;
 
     private bool isInRange = false;
@@ -17,10 +19,14 @@ public class NpcFightController : MonoBehaviour, IFightController
 
     private float nextAttack = 0.15f;
 
+    private bool isStunned = false;
+    private float stunTimer = 0f;
+
     // Start is called before the first frame update
     void Start()
     {
         isInRange = false;
+        isStunned = false;
 
         healthPoints = fightValues.healthPoints;
 
@@ -29,11 +35,20 @@ public class NpcFightController : MonoBehaviour, IFightController
 
     private void Update()
     {
+        if (!npcController.isGameStarted)
+            return;
+
         if (!isInRange)
             return;
 
         if (npcController.isDead)
             return;
+
+        if (isStunned)
+        {
+            StunTimer();
+            return;
+        }
 
         if (Time.time > nextAttack)
         {
@@ -83,6 +98,8 @@ public class NpcFightController : MonoBehaviour, IFightController
         _animationController.TriggerAttackAnimation(PlayerPrefKeys.heavyAttack);
 
         playerFightController.TakeDamage(fightValues.heavyAttackDamage);
+
+        vfxController.PlayHeavyAttackVfx();
     }
 
     public void LightAttack()
@@ -93,21 +110,15 @@ public class NpcFightController : MonoBehaviour, IFightController
         _animationController.TriggerAttackAnimation(PlayerPrefKeys.lightAttack);
 
         playerFightController.TakeDamage(fightValues.lightAttackDamage);
-    }
 
-    public void PlayHeavyAttackVfx()
-    {
-        throw new System.NotImplementedException();
-    }
-
-    public void PlayLightAttackVfx()
-    {
-        throw new System.NotImplementedException();
+        vfxController.PlayLightAttackVfx();
     }
 
     public void TakeDamage(float damageValue)
     {
         healthPoints -= damageValue;
+
+        healthBarView.OnHealthValueChanged(healthPoints);
 
         CheckHealthPoint();
 
@@ -115,9 +126,12 @@ public class NpcFightController : MonoBehaviour, IFightController
         {
             case 10f:
                 _animationController.TriggerAttackAnimation(PlayerPrefKeys.lightDamage);
+                vfxController.PLayLightDamageVfx();
                 break;
             case 25f:
                 _animationController.TriggerAttackAnimation(PlayerPrefKeys.heavyDamage);
+                vfxController.PlayHeavyDamageVfx();
+                CalculateStunChance();
                 break;
         }
     }
@@ -131,6 +145,36 @@ public class NpcFightController : MonoBehaviour, IFightController
             EventSystem.CallNpcDeath();
 
             EventSystem.CallGameOver(GameResult.Lose);
+        }
+    }
+
+    private void CalculateStunChance()
+    {
+        int randomValue = Random.Range(0, 100);
+
+        if (randomValue < fightValues.stunChance)
+        {
+            isStunned = true;
+
+            vfxController.PlayStunEffectVfx(fightValues.stunDuration);
+        }
+
+        else
+        {
+            isStunned = false;
+        }
+    }
+
+    private void StunTimer()
+    {
+        if (stunTimer < fightValues.stunDuration)
+        {
+            stunTimer += Time.time;
+        }
+
+        else
+        {
+            stunTimer = 0f;
         }
     }
 }
