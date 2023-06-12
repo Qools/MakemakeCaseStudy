@@ -8,6 +8,7 @@ public class HealthBarView : MonoBehaviour
 {
     [SerializeField] private CanvasGroup healthBarCanvasGroup;
     [SerializeField] private Image healthBarImage;
+    [SerializeField] private FightValues fightValues;
 
     [SerializeField] private float healthBarChangeDuration;
 
@@ -41,7 +42,7 @@ public class HealthBarView : MonoBehaviour
 
     public void OnHealthValueChanged(float _value)
     {
-        float newHealthValue = _value * 0.01f;
+        float newHealthValue = _value / fightValues.healthPoints;
 
         healthBarImage.DOFillAmount(newHealthValue, healthBarChangeDuration);
     }

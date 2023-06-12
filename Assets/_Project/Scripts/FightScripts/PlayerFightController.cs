@@ -33,6 +33,17 @@ public class PlayerFightController : MonoBehaviour, IFightController
             StunTimer();
             return;
         }
+#if UNITY_EDITOR
+        if (Input.GetKeyDown(KeyCode.A))
+        {
+            LightAttack();
+        }
+
+        if (Input.GetKeyDown(KeyCode.S))
+        {
+            HeavyAttack();
+        }
+#endif
     }
 
     private void OnTriggerEnter(Collider other)

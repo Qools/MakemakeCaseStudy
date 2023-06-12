@@ -219,6 +219,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   healthBarCanvasGroup: {fileID: 6156304365126098505}
   healthBarImage: {fileID: 4245164236844070937}
+  fightValues: {fileID: 11400000, guid: 29e110078a42c8448865f7b64b71a26f, type: 2}
   healthBarChangeDuration: 0.75
 --- !u!1 &8217898219997100738
 GameObject:

@@ -12,11 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 73241588ebfdb304ab442cf3c3f59d43, type: 3}
   m_Name: FightValues
   m_EditorClassIdentifier: 
-  healthPoints: 100
+  healthPoints: 250
   attackCooldown: 2
   heavyAttackDamage: 25
   heavyAttackChange: 25
   lightAttackDamage: 10
   lightAttackChance: 75
   stunChance: 25
-  stunDuration: 2
+  stunDuration: 3

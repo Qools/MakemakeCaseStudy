@@ -49,6 +49,8 @@ public class AnimationController : MonoBehaviour
     private void OnGameOver(GameResult gameResult)
     {
         isGameOver = true;
+
+        _animator.SetFloat(PlayerPrefKeys.movementSpeed, 0f);
     }
 
     public void TriggerAttackAnimation(string _animationName)
