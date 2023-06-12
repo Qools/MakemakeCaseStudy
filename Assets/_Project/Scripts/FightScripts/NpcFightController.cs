@@ -95,8 +95,16 @@ public class NpcFightController : MonoBehaviour, IFightController
         if (!isInRange)
             return;
 
-        _animationController.TriggerAttackAnimation(PlayerPrefKeys.heavyAttack);
+        if (_animationController.animator.GetFloat(PlayerPrefKeys.movementSpeed) > 0.1f)
+        {
+            _animationController.TriggerAttackAnimation(PlayerPrefKeys.runAttack);
+        }
 
+        else
+        {
+            _animationController.TriggerAttackAnimation(PlayerPrefKeys.heavyAttack);
+        }
+       
         playerFightController.TakeDamage(fightValues.heavyAttackDamage);
 
         vfxController.PlayHeavyAttackVfx();
@@ -107,7 +115,15 @@ public class NpcFightController : MonoBehaviour, IFightController
         if (!isInRange)
             return;
 
-        _animationController.TriggerAttackAnimation(PlayerPrefKeys.lightAttack);
+        if (_animationController.animator.GetFloat(PlayerPrefKeys.movementSpeed) > 0.1f)
+        {
+            _animationController.TriggerAttackAnimation(PlayerPrefKeys.runAttack);
+        }
+
+        else
+        {
+            _animationController.TriggerAttackAnimation(PlayerPrefKeys.lightAttack);
+        }
 
         playerFightController.TakeDamage(fightValues.lightAttackDamage);
 
@@ -175,6 +191,7 @@ public class NpcFightController : MonoBehaviour, IFightController
         else
         {
             stunTimer = 0f;
+            isStunned = false;
         }
     }
 }

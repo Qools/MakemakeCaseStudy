@@ -17,6 +17,8 @@ public class PlayerInput : MonoBehaviour
 
     private bool isDead = false;
 
+    public float rigidbodyVelocity;
+
     // Update is called once per frame
     void FixedUpdate()
     {
@@ -71,6 +73,8 @@ public class PlayerInput : MonoBehaviour
         Vector3 newVelocity = joystick.HandleRange * movementSpeed * Time.fixedDeltaTime * direction;
         newVelocity.y = _rigidbody.velocity.y;
         _rigidbody.velocity = newVelocity;
+
+        rigidbodyVelocity = _rigidbody.velocity.magnitude;
     }
 
     private void Rotate()

@@ -20,7 +20,7 @@ public class NpcController : MonoBehaviour
 
     public bool isDead = false;
 
-
+    public float rigidbodyVelocity;
     void FixedUpdate()
     {
         if (!isGameStarted)
@@ -82,6 +82,8 @@ public class NpcController : MonoBehaviour
         Vector3 newVelocity = movementSpeed * Time.fixedDeltaTime * direction;
         newVelocity.y = _rigidbody.velocity.y;
         _rigidbody.velocity = newVelocity;
+
+        rigidbodyVelocity = _rigidbody.velocity.magnitude;
     }
 
     private void Rotate()

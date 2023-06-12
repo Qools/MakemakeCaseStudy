@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using DG.Tweening;
 
 public class AnimationController : MonoBehaviour
 {
@@ -8,6 +9,11 @@ public class AnimationController : MonoBehaviour
     [SerializeField] private Rigidbody _rigidbody;
 
     private bool isGameOver;
+
+    public Animator animator
+    {
+        get { return _animator; }
+    }
 
     private void Start()
     {
@@ -51,5 +57,15 @@ public class AnimationController : MonoBehaviour
             return;
 
         _animator.SetTrigger(_animationName);
+
+        DOVirtual.DelayedCall(1f, ()=> ResetTrigger(_animationName));
+    }
+
+    public void ResetTrigger(string _animationName)
+    {
+        if (isGameOver)
+            return;
+
+        _animator.ResetTrigger(_animationName);
     }
 }

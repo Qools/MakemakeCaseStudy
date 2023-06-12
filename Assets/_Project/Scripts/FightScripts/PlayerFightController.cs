@@ -7,7 +7,6 @@ public class PlayerFightController : MonoBehaviour, IFightController
     [SerializeField] private AnimationController _animationController;
     [SerializeField] private HealthBarView healthBarView;
     [SerializeField] private VfxController vfxController;
-
     [SerializeField] private FightValues fightValues;
 
     private bool isInRange = false;
@@ -64,7 +63,18 @@ public class PlayerFightController : MonoBehaviour, IFightController
         if (!isInRange)
             return;
 
-        _animationController.TriggerAttackAnimation(PlayerPrefKeys.heavyAttack);
+        if (isStunned)
+            return;
+
+        if (_animationController.animator.GetFloat(PlayerPrefKeys.movementSpeed) > 0.1f)
+        {
+            _animationController.TriggerAttackAnimation(PlayerPrefKeys.runAttack);
+        }
+
+        else
+        {
+            _animationController.TriggerAttackAnimation(PlayerPrefKeys.heavyAttack);
+        }
 
         enemyFightController.TakeDamage(fightValues.heavyAttackDamage);
 
@@ -76,7 +86,18 @@ public class PlayerFightController : MonoBehaviour, IFightController
         if (!isInRange)
             return;
 
-        _animationController.TriggerAttackAnimation(PlayerPrefKeys.lightAttack);
+        if (isStunned)
+            return;
+
+        if (_animationController.animator.GetFloat(PlayerPrefKeys.movementSpeed) > 0.1f)
+        {
+            _animationController.TriggerAttackAnimation(PlayerPrefKeys.runAttack);
+        }
+
+        else
+        {
+            _animationController.TriggerAttackAnimation(PlayerPrefKeys.lightAttack);
+        }
 
         enemyFightController.TakeDamage(fightValues.lightAttackDamage);
 
